@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+/* Filament Search Button Enhancement */
+@layer components {
+    /* Peningkatan tampilan form search */
+    .fi-ta-search-field {
+        @apply ring-2 ring-primary-500 shadow-md bg-white dark:bg-gray-900 !important;
+    }
+
+    /* Peningkatan tombol filter */
+    .fi-btn.fi-btn-color-gray {
+        @apply hover:bg-primary-500 hover:text-white transition-colors duration-200 ring-1 ring-primary-200 !important;
+    }
+
+    /* Peningkatan tampilan input search */
+    .fi-input-wrapper {
+        @apply focus-within:ring-2 focus-within:ring-primary-500 !important;
+    }
+
+    /* Tombol search yang lebih menonjol */
+    .fi-ta-search-trigger-btn {
+        @apply bg-primary-500 hover:bg-primary-600 text-white shadow-md hover:shadow-lg transition-all duration-200 !important;
+    }
+
+    /* Pastikan tombol search selalu terlihat */
+    .fi-ta-search-trigger {
+        @apply opacity-100 visible pointer-events-auto !important;
+    }
+
+    /* Tambahkan icon search yang terlihat jelas */
+    .fi-ta-search-trigger-btn svg {
+        @apply w-5 h-5 text-white !important;
+    }
+
+    /* Pastikan form search tidak menyembunyikan tombol */
+    .fi-ta-search-container {
+        @apply max-w-sm !important;
+    }
+
+    /* Style untuk input search box agar lebih menonjol */
+    .fi-ta-search-field input {
+        @apply border-2 border-primary-300 focus:border-primary-500 rounded-md !important;
+    }
+
+    /* Styling untuk custom search button di header */
+    .fi-header-heading button[aria-label="Cari"] {
+        @apply bg-blue-500 hover:bg-blue-600 text-white rounded-md px-3 py-2 shadow-md hover:shadow-lg transition-all duration-200 border-0 !important;
+    }
+
+    /* Styling untuk icon magnifying glass */
+    .fi-header-heading button[aria-label="Cari"] svg {
+        @apply w-5 h-5 mr-1 !important;
+    }
+
+    /* Hover effect untuk tombol search */
+    .fi-header-heading button[aria-label="Cari"]:hover {
+        @apply transform scale-105 !important;
+    }
+
+    /* Dialog search lebih lebar */
+    .fi-modal {
+        @apply max-w-lg !important;
+    }
+
+    /* Input search dalam dialog */
+    .fi-modal .fi-input-wrapper input {
+        @apply border-2 border-blue-300 focus:border-blue-500 !important;
+    }
+}
+
+/* Kustom styling tambahan */
+.fi-sidebar-nav {
+    @apply bg-gradient-to-b from-primary-950 to-primary-900 !important;
+}
+
+/* Header action buttons */
+.fi-ac-btn {
+    @apply bg-primary-500 hover:bg-primary-600 text-white shadow-md hover:shadow-lg transition-all duration-200 !important;
+}
