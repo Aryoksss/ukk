@@ -20,7 +20,6 @@ class Industri extends Model
         'kontak',
         'email',
         'website',
-        'guru_id',
     ];
 
     public function setWebsiteAttribute($value)
@@ -33,13 +32,9 @@ class Industri extends Model
         }
     }
 
-    public function guru(): BelongsTo
+    // relasi dengan pkl
+    public function pkls()
     {
-        return $this->belongsTo(Guru::class, 'guru_id');
-    }
-
-    public function pkls(): HasMany
-    {
-        return $this->hasMany(Pkl::class, 'industri_id');
+        return $this->hasMany(Pkl::class);
     }
 }

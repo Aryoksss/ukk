@@ -16,94 +16,81 @@ class DetailPkl extends Component
     public $pkl;
     public $siswa;
     public $industri;
+    public $guru_id;
     public $guru;
     public $durasi;
-    public $hasSiswaData = false;
-    public $hasPklData = false;
+    public $hasPklData;
     
     // Form untuk edit PKL
     public $isEditing = false;
     public $showIndustriForm = false;
-    
-    // Form fields untuk PKL
-    #[Validate('required|date')]
     public $tanggal_mulai;
-    
-    #[Validate('required|date|after:tanggal_mulai')]
     public $tanggal_selesai;
-    
-    #[Validate('required')]
     public $industri_id;
-    
-    // Form fields untuk industri baru
-    #[Validate('required|string|max:255')]
     public $nama_industri;
-    
-    #[Validate('required|string|max:255')]
     public $bidang_usaha;
-    
-    #[Validate('nullable|string|max:255')]
     public $alamat_industri;
-    
-    #[Validate('nullable|string|max:255')]
     public $kontak_industri;
-    
-    #[Validate('nullable|email|max:255')]
     public $email_industri;
-    
-    #[Validate('nullable|string|max:255')]
     public $website_industri;
     
     public $daftarIndustri = [];
+    public $daftarGuru = [];
 
     protected $queryString = ['activeTab'];
 
     public function mount()
     {
-        // Set locale ke Indonesia
         Carbon::setLocale('id');
-        
-        // Ambil data siswa dari user yang login
+
         $user = Auth::user();
         $this->siswa = $user->siswa;
-        $this->hasSiswaData = $this->siswa !== null;
 
-        if ($this->hasSiswaData) {
-            // Ambil data PKL siswa
+        if ($this->siswa) {
+            $this->hasPklData = $this->siswa->pkl()->exists();
+
+            // ambil data PKL dan industri
             $this->pkl = $this->siswa->pkl;
             $this->hasPklData = $this->pkl !== null;
 
             if ($this->hasPklData) {
                 $this->industri = $this->pkl->industri;
                 $this->guru = $this->industri ? $this->industri->guru : null;
-                
-                // Set form values dengan menggunakan Carbon::parse untuk memastikan format yang benar
+
                 $this->tanggal_mulai = $this->pkl->mulai ? Carbon::parse($this->pkl->mulai)->format('Y-m-d') : null;
                 $this->tanggal_selesai = $this->pkl->selesai ? Carbon::parse($this->pkl->selesai)->format('Y-m-d') : null;
                 $this->industri_id = $this->industri ? $this->industri->id : null;
 
-                // Hitung durasi PKL
                 if ($this->pkl->mulai && $this->pkl->selesai) {
                     $start = Carbon::parse($this->pkl->mulai);
                     $end = Carbon::parse($this->pkl->selesai);
-                    $this->durasi = $start->diffInDays($end) + 1; // +1 untuk menghitung hari terakhir
+                    $this->durasi = $start->diffInDays($end) + 1;
                 }
             } else {
-                // Set default values for new PKL data - mulai hari ini, selesai 3 bulan dari sekarang
                 $now = Carbon::now();
                 $this->tanggal_mulai = $now->format('Y-m-d');
                 $this->tanggal_selesai = $now->copy()->addMonths(3)->format('Y-m-d');
             }
+        } else {
+            // Jika siswa tidak ditemukan, bisa log error atau set default
+            $this->hasPklData = false;
+            session()->flash('error', 'Data siswa tidak ditemukan. Silakan hubungi administrator.');
         }
-        
-        // Load daftar industri
+
         $this->loadIndustri();
+        $this->loadGuru();
     }
     
     public function loadIndustri()
     {
         $this->daftarIndustri = Industri::orderBy('nama')->get();
     }
+
+    public function loadGuru()
+    {
+        $this->daftarGuru = \App\Models\Guru::orderBy('nama')->get();
+    }
+
 
     public function setActiveTab($tab)
     {
@@ -195,64 +182,30 @@ class DetailPkl extends Component
     
     public function updatePkl()
     {
-        // Validasi hanya jika punya data siswa
-        if (!$this->hasSiswaData) {
+        if (!$this->siswa) {
+            session()->flash('error', 'Data siswa tidak ditemukan. Silakan hubungi administrator.');
             return;
         }
-        
-        // Jika sudah ada data PKL, tidak boleh diedit lagi
-        if ($this->hasPklData) {
-            session()->flash('error', 'Data PKL yang sudah ada tidak dapat diubah. Silakan hubungi administrator jika ada kesalahan.');
-            return;
-        }
-        
+
         $this->validate([
             'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after:tanggal_mulai',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'industri_id' => 'required|exists:industris,id',
+            'guru_id' => 'required|exists:gurus,id',
         ]);
-        
-        // Pastikan format tanggal valid
-        $mulai = Carbon::parse($this->tanggal_mulai);
-        $selesai = Carbon::parse($this->tanggal_selesai);
-        
-        // Buat data PKL baru
-        $this->pkl = Pkl::create([
+
+        Pkl::create([
             'siswa_id' => $this->siswa->id,
+            'mulai' => $this->tanggal_mulai,
+            'selesai' => $this->tanggal_selesai,
             'industri_id' => $this->industri_id,
-            'mulai' => $mulai->format('Y-m-d'),
-            'selesai' => $selesai->format('Y-m-d'),
+            'guru_id' => $this->guru_id,
         ]);
-        
-        // Update status siswa
-        $this->siswa->update([
-            'status_lapor_pkl' => 'True', // Sudah Melapor
-        ]);
-        
-        $this->hasPklData = true;
-        
-        // Refresh data
-        $this->pkl->refresh();
-        $this->industri = $this->pkl->industri;
-        $this->guru = $this->industri->guru;
-        
-        // Refresh durasi
-        $start = Carbon::parse($this->pkl->mulai);
-        $end = Carbon::parse($this->pkl->selesai);
-        $this->durasi = $start->diffInDays($end) + 1;
-        
-        // Reset form untuk next time edit
-        $this->tanggal_mulai = Carbon::parse($this->pkl->mulai)->format('Y-m-d');
-        $this->tanggal_selesai = Carbon::parse($this->pkl->selesai)->format('Y-m-d');
-        
-        // Tutup form edit
+
         $this->isEditing = false;
-        
-        // Tampilkan pesan sukses
-        session()->flash('message', 'Data PKL berhasil ditambahkan. Data ini tidak dapat diubah lagi.');
-        
-        // Emit event untuk komponen lain
-        $this->dispatch('pkl-updated');
+        $this->hasPklData = true;
+        $this->mount(); // reload semua data
+        session()->flash('message', 'Data PKL berhasil ditambahkan.');
     }
 
     public function render()

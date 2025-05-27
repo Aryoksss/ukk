@@ -34,6 +34,7 @@ class GuruResource extends Resource
                         'Laki - Laki' => 'Laki - Laki',
                         'Perempuan' => 'Perempuan',
                     ])
+                    ->native(false)
                     ->required(),
                 Forms\Components\TextInput::make('alamat')
                     ->maxLength(255),

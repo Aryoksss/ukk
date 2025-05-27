@@ -67,12 +67,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
-    /**
-     * Get the siswa associated with the user.
-     */
-    public function siswa(): HasOne
-    {
-        return $this->hasOne(Siswa::class);
-    }
 }

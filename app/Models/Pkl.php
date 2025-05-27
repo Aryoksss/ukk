@@ -15,6 +15,7 @@ class Pkl extends Model
 
     protected $fillable = [
         'siswa_id',
+        'guru_id',
         'industri_id',
         'mulai',
         'selesai',
@@ -37,13 +38,21 @@ class Pkl extends Model
         return $this->selesai ? Carbon::parse($this->selesai)->locale('id')->isoFormat('DD MMMM YYYY') : null;
     }
 
-    public function siswa(): BelongsTo
+    // relasi dengan guru
+    public function guru()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
+        return $this->belongsTo(Guru::class);
     }
 
-    public function industri(): BelongsTo
+    // relasi dengan industri
+    public function industri()
     {
-        return $this->belongsTo(Industri::class, 'industri_id');
+        return $this->belongsTo(Industri::class);
+    }
+
+    // relasi dengan siswa
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
     }
 }

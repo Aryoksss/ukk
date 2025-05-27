@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('kontak');
             $table->string('email')->unique();
             $table->string('website')->nullable();
-            $table->foreignId('guru_id')->constrained('gurus')->onDelete('cascade');
             $table->timestamps();
         });
     }

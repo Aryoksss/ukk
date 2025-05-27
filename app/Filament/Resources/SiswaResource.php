@@ -31,44 +31,9 @@ class SiswaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->label('Akun User')
-                    ->relationship(
-                        name: 'user',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn (\Illuminate\Database\Eloquent\Builder $query) => 
-                            $query->whereDoesntHave('siswa', function ($query) use ($form) {
-                                // Jangan tampilkan user yang sudah memiliki siswa kecuali user dari record yang sedang diedit
-                                $query->where('id', '!=', $form->getRecord()?->id ?? 0);
-                            })
-                    )
-                    ->searchable()
-                    ->preload()
-                    ->live()
-                    ->afterStateUpdated(function ($state, Forms\Set $set) {
-                        if (!empty($state)) {
-                            $user = \App\Models\User::find($state);
-                            if ($user) {
-                                $set('nama', $user->name);
-                                $set('email', $user->email);
-                            }
-                        } else {
-                            $set('nama', null);
-                            $set('email', null);
-                        }
-                    }),
-                Forms\Components\Placeholder::make('user_info')
-                    ->label('Info User')
-                    ->content(fn ($get, $record) => $record && $record->user_id ? 'User terhubung dengan: ' . 
-                        (\App\Models\User::find($record->user_id)->name ?? 'Tidak ditemukan') : 'Belum terhubung dengan user manapun')
-                    ->visible(fn ($get) => $get('user_id') !== null)
-                    ->hidden(true),
                 Forms\Components\TextInput::make('nama')
-                    ->label('Nama Siswa')
                     ->required()
-                    ->maxLength(255)
-                    ->disabled(fn ($get) => $get('user_id') !== null)
-                    ->dehydrated(true),
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('nis')
                     ->label('NIS')
                     ->required()
@@ -76,6 +41,7 @@ class SiswaResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('rombel')
                     ->label('Rombel')
+                    ->native(false)
                     ->options([
                         'SIJA A' => 'SIJA A',
                         'SIJA B' => 'SIJA B',
@@ -83,6 +49,7 @@ class SiswaResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('gender')
                     ->label('Jenis Kelamin')
+                    ->native(false)
                     ->options([
                         'Laki-Laki' => 'Laki-Laki',
                         'Perempuan' => 'Perempuan',
@@ -101,9 +68,7 @@ class SiswaResource extends Resource
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true)
-                    ->maxLength(255)
-                    ->disabled(fn ($get) => $get('user_id') !== null)
-                    ->dehydrated(true),
+                    ->maxLength(255),
                 Forms\Components\FileUpload::make('foto')
                     ->label('Foto Siswa')
                     ->image()
@@ -118,27 +83,6 @@ class SiswaResource extends Resource
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
                     ->maxSize(2048)
                     ->helperText('Format: JPG, PNG. Ukuran maks: 2MB. Rasio 1:1.'),
-                Forms\Components\Select::make('status_lapor_pkl')
-                    ->label('Status Lapor PKL')
-                    ->options([
-                        'False' => 'Belum Melapor',
-                        'True' => 'Sudah Melapor',
-                    ])
-                    ->default('False')
-                    ->disabled(fn ($record) => $record && $record->pkl !== null)
-                    ->dehydrated(true)
-                    ->afterStateHydrated(function ($component, $state, $record) {
-                        // Otomatis ubah status menjadi 'True' jika siswa memiliki data PKL
-                        if ($record && $record->pkl !== null) {
-                            $component->state('True');
-                            
-                            // Update database jika berbeda
-                            if ($record->status_lapor_pkl !== 'True') {
-                                $record->status_lapor_pkl = 'True';
-                                $record->save();
-                            }
-                        }
-                    }),
             ]);
     }
 
@@ -197,14 +141,6 @@ class SiswaResource extends Resource
                 Tables\Columns\TextColumn::make('nis')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->label('Akun User')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->badge()
-                    ->color('success')
-                    ->default('Tidak ada'),
                 Tables\Columns\TextColumn::make('gender'),
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable()
@@ -213,20 +149,11 @@ class SiswaResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status_lapor_pkl')
+                Tables\Columns\BadgeColumn::make('status_lapor_pkl')
                     ->label('Status PKL')
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'True' => 'Sudah Melapor',
-                        'False' => 'Belum Melapor',
-                        default => 'Belum Diatur',
-                    })
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'True' => 'success',
-                        'False' => 'danger',
-                        default => 'warning',
-                    })
-                    ->description(fn ($record) => $record->pkl ? 'Di ' . $record->pkl?->industri?->nama : null),
+                    ->formatStateUsing(fn ($state) => $state ? 'Aktif' : 'Tidak Aktif') 
+                    ->color(fn ($state) => $state ? 'success' : 'danger'),
+                    // ->description(fn ($record) => $record->pkl ? 'Di ' . $record->pkl?->industri?->nama : null),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -237,13 +164,10 @@ class SiswaResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-                SelectFilter::make('status_lapor_pkl')
-                    ->label('Status Lapor PKL')
-                    ->options([
-                        'True' => 'Sudah Melapor',
-                        'False' => 'Belum Melapor',
-                    ]),
+               Tables\Filters\TernaryFilter::make('status_lapor_pkl') 
+                    ->trueLabel('Aktif') 
+                    ->falseLabel('Nonaktif'), 
+
                 Filter::make('has_foto')
                     ->label('Status Foto')
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('foto'))

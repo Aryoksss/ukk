@@ -21,8 +21,8 @@ class Guru extends Model
         'email',
     ];
 
-    public function industris(): HasMany
+    public function pkls()
     {
-        return $this->hasMany(Industri::class, 'guru_id');
+        return $this->hasMany(Pkl::class);
     }
 }

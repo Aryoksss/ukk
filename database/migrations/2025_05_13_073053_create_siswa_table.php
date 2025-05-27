@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('kontak');
             $table->string('email')->unique();
             $table->string('foto')->nullable();
-            $table->enum('status_lapor_pkl', ['True', 'False']);
+            $table->boolean('status_lapor_pkl')->default(false);
             $table->timestamps();
         });
     }

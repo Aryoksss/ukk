@@ -50,20 +50,6 @@ class IndustriResource extends Resource
                         Forms\Components\TextInput::make('website')
                             ->maxLength(255)
                             ->helperText('Contoh: example.com'),
-                        Forms\Components\Select::make('guru_id')
-                            ->relationship('guru', 'nama')
-                            ->searchable()
-                            ->preload()
-                            ->required()
-                            ->createOptionForm([
-                                Forms\Components\TextInput::make('nama')
-                                    ->required()
-                                    ->maxLength(255),
-                                Forms\Components\TextInput::make('email')
-                                    ->email()
-                                    ->required()
-                                    ->maxLength(255),
-                            ]),
                     ]),
             ]);
     }
@@ -95,8 +81,6 @@ class IndustriResource extends Resource
                     ->url(fn (Industri $record): string => $record->website ? "https://{$record->website}" : '#')
                     ->openUrlInNewTab()
                     ->label('Website'),
-                Tables\Columns\TextColumn::make('guru.nama')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

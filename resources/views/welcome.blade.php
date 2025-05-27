@@ -221,7 +221,7 @@
                     <div class="md:w-1/2 animate-on-scroll animate-from-right mt-6 md:mt-0">
                         <div class="relative">
                             <img 
-                                src="{{ asset('storage/images/01JV4ZBATP4KG8KG1ZPQKSYZAH.jpg') }}" 
+                                src="{{ asset('img/hutao.jpg') }}" 
                                 alt="PKL Management Dashboard" 
                                 class="relative w-full max-w-md mx-auto h-auto rounded-xl shadow-lg transition-transform duration-500 hover:scale-[1.02] object-cover"
                             >

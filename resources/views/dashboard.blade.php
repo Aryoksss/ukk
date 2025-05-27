@@ -14,8 +14,9 @@
             
             @php
                 $user = Auth::user();
-                $siswa = $user->siswa;
-                $pkl = $siswa ? $siswa->pkl : null;
+                $siswa = \App\Models\Siswa::where('email', $user->email)->first();
+
+                $pkl = $siswa && $siswa->pkl ? $siswa->pkl()->latest('mulai')->first() : null;
                 $today = \Carbon\Carbon::today();
                 
                 $statusPkl = 'Belum PKL';
@@ -95,7 +96,7 @@
     </div>
     @endif
 
-    @if(!$siswa)
+    <!-- @if(!$siswa)
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-5 sm:rounded-xl shadow-lg overflow-hidden relative" role="alert">
@@ -133,13 +134,14 @@
             </div>
         </div>
     </div>
-    @endif
+    @endif -->
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             <!-- User Info Card -->
             @if($siswa)
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-xl">
+                
                 <div class="p-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
                     <h3 class="font-semibold">Informasi Siswa</h3>
                 </div>
@@ -179,7 +181,7 @@
                                 <div class="bg-indigo-50 p-3 rounded-lg shadow-sm group hover:bg-indigo-100 transition duration-300">
                                     <h4 class="text-sm font-medium text-indigo-600 group-hover:text-indigo-700">Status PKL</h4>
                                     <div class="mt-1">
-                                        @if($siswa->status_lapor_pkl == 'True')
+                                        @if($siswa->status_lapor_pkl == 1)
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 shadow-sm">
                                                 <svg class="mr-1 h-2 w-2 text-green-600" fill="currentColor" viewBox="0 0 8 8">
                                                     <circle cx="4" cy="4" r="3" />
@@ -212,7 +214,7 @@
                     </svg>
                 </div>
                 <div class="p-6">
-                    <livewire:dashboard.pkl-summary />
+                    <livewire:dashboard.detail-pkl />
                 </div>
             </div>
             
@@ -238,19 +240,19 @@
                     </svg>
                 </div>
                 <div class="p-6">
-                    @if($pkl && $pkl->industri && $pkl->industri->guru)
+                    @if($pkl && $pkl->industri && $pkl->guru)
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div class="bg-green-50 p-4 rounded-lg shadow-sm group hover:bg-green-100 transition duration-300">
                                 <h4 class="text-sm font-medium text-green-700 group-hover:text-green-800">Nama Guru Pembimbing</h4>
-                                <p class="text-lg font-semibold text-gray-800">{{ $pkl->industri->guru->nama ?? 'Belum ditentukan' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $pkl->guru->nama ?? 'Belum ditentukan' }}</p>
                             </div>
                             <div class="bg-green-50 p-4 rounded-lg shadow-sm group hover:bg-green-100 transition duration-300">
                                 <h4 class="text-sm font-medium text-green-700 group-hover:text-green-800">NIP</h4>
-                                <p class="text-lg font-semibold text-gray-800">{{ $pkl->industri->guru->nip ?? '-' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $pkl->guru->nip ?? '-' }}</p>
                             </div>
                             <div class="bg-green-50 p-4 rounded-lg shadow-sm group hover:bg-green-100 transition duration-300 md:col-span-2">
                                 <h4 class="text-sm font-medium text-green-700 group-hover:text-green-800">Kontak</h4>
-                                <p class="text-lg font-semibold text-gray-800">{{ $pkl->industri->guru->kontak ?? 'Tidak tersedia' }}</p>
+                                <p class="text-lg font-semibold text-gray-800">{{ $pkl->guru->kontak ?? 'Tidak tersedia' }}</p>
                             </div>
                         </div>
                     @else
