@@ -1,25 +1,4 @@
 <div>
-    @if(!$hasSiswaData)
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-        <div class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-            </svg>
-            <h3 class="text-lg font-medium text-gray-900">Belum Ada Data Siswa</h3>
-            <p class="mt-1 text-sm text-gray-500">Data siswa Anda belum tersedia. Silakan hubungi administrator untuk menambahkan data siswa Anda.</p>
-        </div>
-    </div>
-    @elseif(!$hasPklData)
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-        <div class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <h3 class="text-lg font-medium text-gray-900">Belum Ada Data PKL</h3>
-            <p class="mt-1 text-sm text-gray-500">Data PKL Anda belum tersedia. Silakan hubungi guru pembimbing atau administrator untuk mendapatkan penempatan PKL.</p>
-        </div>
-    </div>
-    @else
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Bagian Kiri - Status PKL -->
         <div class="lg:col-span-2 bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
@@ -87,11 +66,11 @@
             <div class="grid grid-cols-2 gap-4 mt-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <div class="text-sm text-gray-500 mb-1">Tanggal Mulai</div>
-                    <div class="font-medium text-lg">{{ $pkl && $pkl->mulai ? \Carbon\Carbon::parse($pkl->mulai)->locale('id')->isoFormat('DD MMMM YYYY') : '-' }}</div>
+                    <div class="font-medium text-lg">{{ $pkl->mulai ? \Carbon\Carbon::parse($pkl->mulai)->locale('id')->isoFormat('DD MMMM YYYY') : '-' }}</div>
                 </div>
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <div class="text-sm text-gray-500 mb-1">Tanggal Selesai</div>
-                    <div class="font-medium text-lg">{{ $pkl && $pkl->selesai ? \Carbon\Carbon::parse($pkl->selesai)->locale('id')->isoFormat('DD MMMM YYYY') : '-' }}</div>
+                    <div class="font-medium text-lg">{{ $pkl->selesai ? \Carbon\Carbon::parse($pkl->selesai)->locale('id')->isoFormat('DD MMMM YYYY') : '-' }}</div>
                 </div>
             </div>
         </div>
@@ -173,6 +152,4 @@
             </div>
         </div>
     </div>
-    
-    @endif
 </div>

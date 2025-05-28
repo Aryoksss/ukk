@@ -80,6 +80,8 @@
             </div>
         </div>
     @else
-        <h1>gugugga</h1>
+        <!-- <h1>gugugga</h1> -->
+
+        @livewire('dashboard.pkl-summary')
     @endif
 </div>
