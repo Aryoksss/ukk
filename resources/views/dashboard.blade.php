@@ -132,7 +132,7 @@
                                 </div>
                                 <div class="bg-indigo-50 p-3 rounded-lg shadow-sm group hover:bg-indigo-100 transition duration-300">
                                     <h4 class="text-sm font-medium text-indigo-600 group-hover:text-indigo-700">Rombel</h4>
-                                    <p class="text-lg font-semibold text-gray-800">{{ $siswa->rombel }}</p>
+                                    <p class="text-lg font-semibold text-gray-800">{{ \Illuminate\Support\Facades\DB::select("select getRombelCode(?) AS rombel", [$siswa->rombel])[0]->rombel }}</p>
                                 </div>
                                 <div class="bg-indigo-50 p-3 rounded-lg shadow-sm group hover:bg-indigo-100 transition duration-300">
                                     <h4 class="text-sm font-medium text-indigo-600 group-hover:text-indigo-700">Status PKL</h4>

@@ -132,7 +132,7 @@
                                                 </div>
                                                 <div>
                                                     <dt class="text-sm font-medium text-gray-500">Rombel</dt>
-                                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedSiswa->rombel ?? 'Belum ada data' }}</dd>
+                                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedSiswa->rombel ? \Illuminate\Support\Facades\DB::select("select getRombelCode(?) AS rombel", [$selectedSiswa->rombel])[0]->rombel : 'Belum ada data' }}</dd>
                                                 </div>
                                                 <div>
                                                     <dt class="text-sm font-medium text-gray-500">Alamat</dt>
