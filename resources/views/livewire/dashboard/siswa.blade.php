@@ -78,7 +78,7 @@
                                         <div class="ml-4">
                                             <div class="text-base font-semibold text-gray-900">{{ $s->nama }}</div>
                                             <div class="text-sm text-gray-600">NIS: {{ $s->nis }}</div>
-                                            <div class="text-xs text-indigo-600 mt-1">{{ $s->rombel ?? 'Rombel tidak tersedia' }}</div>
+                                            <div class="text-xs text-indigo-600 mt-1">{{ $s->rombel ? \Illuminate\Support\Facades\DB::select("select getRombelCode(?) AS rombel", [$s->rombel])[0]->rombel : 'Rombel tidak tersedia' }}</div>
                                         </div>
                                     </div>
                                     <div class="flex flex-col sm:flex-row sm:space-x-2">
