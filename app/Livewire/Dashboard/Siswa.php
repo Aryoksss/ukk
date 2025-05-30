@@ -43,7 +43,7 @@ class Siswa extends Component
     {
         $siswa = SiswaModel::where('nama', 'like', '%' . $this->search . '%')
             ->orWhere('nis', 'like', '%' . $this->search . '%')
-            ->paginate(10);
+            ->paginate(7);
 
         return view('livewire.dashboard.siswa', compact('siswa'));
     }
