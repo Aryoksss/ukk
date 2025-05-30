@@ -13,11 +13,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class SiswaResource extends Resource
 {
@@ -43,16 +42,16 @@ class SiswaResource extends Resource
                     ->label('Rombel')
                     ->native(false)
                     ->options([
-                        'SIJA A' => 'SIJA A',
-                        'SIJA B' => 'SIJA B',
+                        'A' => 'SIJA A',
+                        'B' => 'SIJA B',
                     ])
                     ->required(),
                 Forms\Components\Select::make('gender')
                     ->label('Jenis Kelamin')
                     ->native(false)
                     ->options([
-                        'Laki-Laki' => 'Laki-Laki',
-                        'Perempuan' => 'Perempuan',
+                        'L' => 'Laki-Laki',
+                        'P' => 'Perempuan',
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('alamat')
@@ -97,7 +96,15 @@ class SiswaResource extends Resource
                 Tables\Columns\TextColumn::make('nis')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('gender'),
+                Tables\Columns\TextColumn::make('rombel')
+                    ->label('Rombel')
+                    ->formatStateUsing(fn ($state) => DB::select("select getRombelCode(?) AS rombel", [$state])[0]->rombel)
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('gender')
+                    ->formatStateUsing(fn ($state) => DB::select("select getGenderCode(?) AS gender", [$state])[0]->gender)
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),

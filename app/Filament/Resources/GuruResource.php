@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 
 class GuruResource extends Resource
 {
@@ -31,8 +32,8 @@ class GuruResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('gender')
                     ->options([
-                        'Laki - Laki' => 'Laki - Laki',
-                        'Perempuan' => 'Perempuan',
+                        'L' => 'Laki - Laki',
+                        'P' => 'Perempuan',
                     ])
                     ->native(false)
                     ->required(),
@@ -56,7 +57,11 @@ class GuruResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nip')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('gender'),
+                Tables\Columns\TextColumn::make('gender')
+                ->formatStateUsing(fn ($state) => DB::select("select getGenderCode(?) AS gender", [$state])[0]->gender)
+                    ->searchable()
+                    ->label('Jenis Kelamin')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('kontak')
