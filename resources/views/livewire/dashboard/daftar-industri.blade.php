@@ -221,4 +221,12 @@
             </button>
         </div>
     </x-app-layout>
+        <style>
+        body, html {
+            overflow-y: auto;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </div>

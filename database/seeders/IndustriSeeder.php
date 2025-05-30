@@ -20,7 +20,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Jl. Wongso Permono No.26, Klidon, Sukoharjo, Kec. Ngaglik, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55581',
                 'kontak' => '08982909000',
                 'email' => 'aksa@gmail.com',
-                'website' => 'https://aksa.id/',
+                'website' => 'aksa.id',
             ],
             [
                 'nama' => 'PT. Gamatechno Indonesia', 
@@ -28,7 +28,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Jl. Purwomartani, Karangmojo, Purwomartani, Kec. Kalasan, Kabupaten Sleman, Daerah Istimewa Yogyakarta',
                 'kontak' => '0274-5044044',
                 'email' => 'info@gamatechno.com',
-                'website' => 'https://www.gamatechno.com/',
+                'website' => 'gamatechno.com',
             ],
             [
                 'nama' => 'CV. Karya Hidup Sentosa ', 
@@ -36,7 +36,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'JJl. Magelang KM.8,8, Jongke Tengah, Sendangadi, Kec. Mlati, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55285',
                 'kontak' => '0274-512095',
                 'email' => 'quick@gmail.com',
-                'website' => 'https://www.quick.co.id/',
+                'website' => 'quick.co.id',
             ],
             [
                 'nama' => 'PT CyberKarta Tugu Teknologi',
@@ -44,7 +44,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Jl. Pogung Kidul No.17, Pogung Kidul, Sinduadi, Kec. Mlati, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55284',
                 'kontak' => '0851-6183-5865',
                 'email' => 'business@cyberkarta.com',
-                'website' => 'https://cyberkarta.com/',
+                'website' => 'cyberkarta.com',
             ],
             [
                 'nama' => 'PT Telekomunikasi Indonesia Tbk (Telkom Indonesia)',
@@ -52,7 +52,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Jl. Japati No.1, Citarum, Kec. Bandung Wetan, Kota Bandung, Jawa Barat 40115',
                 'kontak' => '188 (Call Center)',
                 'email' => 'customercare@telkom.co.id',
-                'website' => 'https://www.telkom.co.id/'
+                'website' => 'telkom.co.id'
             ],
             [
                 'nama' => 'PT Bank Central Asia Tbk (BCA)',
@@ -60,7 +60,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Menara BCA, Grand Indonesia, Jl. M.H. Thamrin No. 1, Jakarta Pusat 10310',
                 'kontak' => '1500888 (Halo BCA)',
                 'email' => 'halobca@bca.co.id',
-                'website' => 'https://www.bca.co.id/'
+                'website' => 'bca.co.id'
             ],
             [
                 'nama' => 'PT Indofood Sukses Makmur Tbk',
@@ -68,7 +68,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Sudirman Plaza, Indofood Tower, Lantai 27, Jl. Jend. Sudirman Kav. 76-78, Jakarta 12910',
                 'kontak' => '(021) 57958822',
                 'email' => 'indofood@indofood.co.id',
-                'website' => 'https://www.indofood.com/'
+                'website' => 'indofood.com'
             ],
             [
                 'nama' => 'PT Bio Farma (Persero)',
@@ -76,7 +76,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Jl. Pasteur No.28, Pasteur, Kec. Sukajadi, Kota Bandung, Jawa Barat 40161',
                 'kontak' => '(022) 2033755',
                 'email' => 'mail@biofarma.co.id',
-                'website' => 'https://www.biofarma.co.id/'
+                'website' => 'biofarma.co.id'
             ],
             [
                 'nama' => 'PT GoTo Gojek Tokopedia Tbk',
@@ -84,7 +84,7 @@ class IndustriSeeder extends Seeder
                 'alamat' => 'Pasaraya Blok M Gedung B, Lt. 6-7, Jl. Iskandarsyah II No.7, Melawai, Kebayoran Baru, Jakarta Selatan 12160',
                 'kontak' => 'Bervariasi tergantung layanan (Gojek/Tokopedia)',
                 'email' => 'customerservice@gojek.com / care@tokopedia.com',
-                'website' => 'https://www.gotocompany.com/'
+                'website' => 'hgotocompany.com'
             ]
             ]);
     }
