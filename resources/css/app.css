@@ -80,3 +80,4 @@
 .fi-ac-btn {
     @apply bg-primary-500 hover:bg-primary-600 text-white shadow-md hover:shadow-lg transition-all duration-200 !important;
 }
+

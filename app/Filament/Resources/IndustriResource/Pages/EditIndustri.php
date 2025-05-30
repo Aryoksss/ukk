@@ -13,7 +13,25 @@ class EditIndustri extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+            ->action(function ($record) {
+                // Cek apakah industri memiliki data PKL terkait
+                if ($record->pkls()->count() > 0) {
+                // Batalkan penghapusan dengan pesan error yang user-friendly
+                \Filament\Notifications\Notification::make()
+                    ->title('Gagal Menghapus')
+                    ->body('Tidak dapat menghapus ' . $record->nama . 'ini karena masih memiliki data PKL terkait. Hapus data PKL terlebih dahulu.')
+                    ->danger()
+                    ->send();
+                return;
+                }
+                $record->delete();
+                \Filament\Notifications\Notification::make()
+                ->title('Berhasil')
+                ->body('Data industri berhasil dihapus')
+                ->success()
+                ->send();
+            })->requiresConfirmation(),
         ];
     }
 }

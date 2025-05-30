@@ -13,7 +13,26 @@ class EditGuru extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+            ->action(function ($record) {
+                // Check specifically for PKLs like in your bulk action
+                if ($record->pkls()->count() > 0) {
+                    \Filament\Notifications\Notification::make()
+                        ->title('Gagal Menghapus')
+                        ->body('Tidak dapat menghapus ' . $record->nama . '. Hapus data terkait terlebih dahulu.')
+                        ->danger()
+                        ->send();
+                    return;
+                }
+                
+                $record->delete();
+                \Filament\Notifications\Notification::make()
+                    ->title('Berhasil')
+                    ->body('Data guru berhasil dihapus')
+                    ->success()
+                    ->send();
+            })
+            ->requiresConfirmation()
         ];
     }
 }

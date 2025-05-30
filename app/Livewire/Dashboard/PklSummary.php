@@ -42,7 +42,7 @@ class PklSummary extends Component
     {
         if ($this->hasPklData) {
             $this->industri = $this->pkl->industri;
-            $this->guru = $this->industri ? $this->industri->guru : null;
+            $this->guru = $this->pkl->guru;
 
             // Hitung durasi PKL
             if ($this->pkl->mulai && $this->pkl->selesai) {

@@ -96,39 +96,58 @@ class IndustriResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                    ->requiresConfirmation()
-                    ->modalHeading('Hapus Data Industri')
-                    ->modalDescription('Apakah Anda yakin ingin menghapus data industri ini? Data yang sudah dihapus tidak dapat dikembalikan.')
-                    ->modalSubmitActionLabel('Ya, Hapus')
-                    ->modalCancelActionLabel('Batal')
-                    ->successNotificationTitle('Data industri berhasil dihapus')
-                    ->before(function ($record) {
-                        // Cek apakah industri memiliki data PKL
+                    ->action(function (Industri $record) {
+                        // Cek apakah industri memiliki data PKL terkait
                         if ($record->pkls()->count() > 0) {
                             // Batalkan penghapusan dengan pesan error yang user-friendly
-                            $this->halt('Tidak dapat menghapus industri ini karena masih memiliki data PKL terkait. Hapus data PKL terlebih dahulu.');
+                            \Filament\Notifications\Notification::make()
+                                ->title('Gagal Menghapus')
+                                ->body('Tidak dapat menghapus ' . $record->nama . ' karena masih memiliki data PKL terkait. Hapus data PKL terlebih dahulu.')
+                                ->danger()
+                                ->send();
+                            return;
                         }
-                    }),
+                        $record->delete();
+                        \Filament\Notifications\Notification::make()
+                            ->title('Berhasil')
+                            ->body('Data industri berhasil dihapus')
+                            ->success()
+                            ->send();
+                    })->requiresConfirmation()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->requiresConfirmation()
-                        ->modalHeading('Hapus Data Industri')
-                        ->modalDescription('Apakah Anda yakin ingin menghapus semua data industri yang dipilih? Data yang sudah dihapus tidak dapat dikembalikan.')
-                        ->modalSubmitActionLabel('Ya, Hapus')
-                        ->modalCancelActionLabel('Batal')
-                        ->successNotificationTitle('Data industri berhasil dihapus')
-                        ->before(function ($records) {
-                            // Cek setiap industri apakah memiliki data PKL
-                            foreach ($records as $record) {
-                                if ($record->pkls()->count() > 0) {
-                                    // Batalkan penghapusan dengan pesan error yang user-friendly
-                                    $this->halt('Tidak dapat menghapus beberapa industri karena masih memiliki data PKL terkait. Hapus data PKL terlebih dahulu.');
-                                }
+                Tables\Actions\DeleteBulkAction::make()
+                    ->action(function (\Illuminate\Support\Collection $records) {
+                        $skipped = 0;
+                        $deleted = 0;
+                        
+                        foreach ($records as $record) {
+                            // Cek apakah industri memiliki data PKL terkait
+                            if ($record->pkls()->count() > 0) {
+                                $skipped++;
+                                continue;
                             }
-                        }),
-                ]),
+                            
+                            $record->delete();
+                            $deleted++;
+                        }
+                        
+                        if ($skipped > 0) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Data Tidak Dapat Dihapus')
+                                ->body("$skipped data industri tidak dapat dihapus karena masih memiliki data PKL terkait.")
+                                ->danger()
+                                ->send();
+                        }
+                        
+                        if ($deleted > 0) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Berhasil')
+                                ->body(". $record->nama . data industri berhasil dihapus")
+                                ->success()
+                                ->send();
+                        }
+                    }),
             ])
             ->defaultSort('nama')
             ->persistFiltersInSession()

@@ -77,12 +77,47 @@ class GuruResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->action(function ($record) {
+                // Check specifically for PKLs like in your bulk action
+                if ($record->pkls()->count() > 0) {
+                    \Filament\Notifications\Notification::make()
+                        ->title('Gagal Menghapus')
+                        ->body('Tidak dapat menghapus ' . $record->nama . '. Hapus data terkait terlebih dahulu.')
+                        ->danger()
+                        ->send();
+                    return;
+                }
+                
+                $record->delete();
+                \Filament\Notifications\Notification::make()
+                    ->title('Berhasil')
+                    ->body('Data guru berhasil dihapus')
+                    ->success()
+                    ->send();
+            })
+            ->requiresConfirmation()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->action(function (\Illuminate\Database\Eloquent\Collection $records) {
+                        foreach ($records as $record) {
+                            if ($record->pkls()->count() > 0) {
+                                \Filament\Notifications\Notification::make()
+                                    ->title('Gagal Menghapus')
+                                    ->body('Tidak dapat menghapus ' . $record->nama . '. Hapus data terkait terlebih dahulu.')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
+                        }
+                        $records->each->delete();
+                        \Filament\Notifications\Notification::make()
+                            ->title('Berhasil')
+                            ->body('Data guru berhasil dihapus')
+                            ->success()
+                            ->send();
+                    })->requiresConfirmation()
             ]);
     }
 

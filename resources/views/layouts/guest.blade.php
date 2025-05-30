@@ -24,7 +24,7 @@
             }
             .auth-background {
                 background: linear-gradient(135deg, #4c6ef5 0%, #0072ff 100%);
-                background-color: #0052cc;
+                background-color: #4189d64f;
                 background-image: 
                     radial-gradient(at 47% 33%, hsla(217, 100%, 75%, 0.8) 0, transparent 59%), 
                     radial-gradient(at 82% 65%, hsla(218, 100%, 65%, 0.8) 0, transparent 55%);

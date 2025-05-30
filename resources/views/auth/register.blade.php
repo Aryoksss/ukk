@@ -12,8 +12,8 @@
             @csrf
 
             <div class="transition-all duration-300 ease-in-out hover:translate-x-1">
-                <x-label for="name" value="{{ __('Nama Lengkap') }}" class="font-medium" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Masukkan nama lengkap Anda" />
+                <x-label for="name" value="{{ __('Nama') }}" class="font-medium" />
+                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Masukkan nama Anda" />
             </div>
 
             <div class="transition-all duration-300 ease-in-out hover:translate-x-1">

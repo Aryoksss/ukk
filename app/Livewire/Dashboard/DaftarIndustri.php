@@ -115,15 +115,15 @@ class DaftarIndustri extends Component
         $this->reset(['nama_industri', 'bidang_usaha', 'alamat_industri', 'kontak_industri', 'email_industri', 'website_industri']);
     }
 
-    public function render()
-    {
-        return view('livewire.dashboard.daftar-industri', [
-            'industris' => Industri::query()
-                ->where(function($query) {
-                    $query->where('nama', 'like', '%' . $this->search . '%')
-                        ->orWhere('bidang_usaha', 'like', '%' . $this->search . '%');
-                })
-                ->paginate($this->perPage)
-        ]); 
-    }
+        public function render()
+        {
+
+
+            return view('livewire.dashboard.daftar-industri', [
+                'industris' => Industri::where('nama', 'like', '%' . $this->search . '%')
+                    ->orWhere('bidang_usaha', 'like', '%' . $this->search . '%')
+                    ->paginate($this->perPage),
+                'gurus' => Guru::all(),
+            ]);
+        }
 }

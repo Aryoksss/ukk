@@ -66,6 +66,7 @@ class PklResource extends Resource
                             Forms\Components\DatePicker::make('selesai')
                                 ->label('Tanggal Selesai')
                                 ->maxDate(now()->addYears(5))
+                                ->minDate(fn ($get) => $get('mulai') ? \Carbon\Carbon::parse($get('mulai'))->addMonths(3)->toDateString() : null)
                                 ->after('mulai') // memastikan tanggal selesai tidak lebih awal dari mulai
                                 ->required(),
                         ])

@@ -1,10 +1,6 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Menunggu Persetujuan') }}
-        </h2>
-    </x-slot>
 
+    {{-- Redirect otomatis ke dashboard jika user sudah memiliki role --}}
     @if(!Auth::user()->roles->isEmpty())
     <script>
         // Redirect otomatis ke dashboard jika user sudah memiliki role
@@ -107,7 +103,7 @@
                             </div>
                         </div>
                         <p class="text-gray-600 text-sm">
-                            Memeriksa status persetujuan setiap <span id="countdown" class="font-bold text-blue-600">15</span> detik
+                            Memeriksa status persetujuan setiap <span id="countdown" class="font-bold text-blue-600">5</span> detik
                         </p>
                     </div>
                     
@@ -124,7 +120,7 @@
                                 <svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                Anda masih dapat mengakses pengaturan profil untuk mengubah informasi pribadi atau foto profil.
+                                Anda masih dapat mengakses selain dashboard selama menunggu persetujuan.
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -144,7 +140,7 @@
 
     <script>
         // Auto cek status role menggunakan AJAX
-        let countdown = 15; // Lebih cepat dengan AJAX
+        let countdown = 5; // Lebih cepat dengan AJAX
         const countdownElement = document.getElementById('countdown');
         
         function checkRoleStatus() {
@@ -167,7 +163,7 @@
             
             if (countdown <= 0) {
                 // Reset countdown dan cek status
-                countdown = 15;
+                countdown = 5;
                 countdownElement.textContent = countdown;
                 checkRoleStatus();
             }

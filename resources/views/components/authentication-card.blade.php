@@ -7,7 +7,4 @@
         {{ $slot }}
     </div>
     
-    <div class="mt-4 text-center text-sm text-gray-700 auth-card-footer">
-        <p>Sistem Manajemen PKL {{ now()->format('Y') }}</p>
-    </div>
 </div>

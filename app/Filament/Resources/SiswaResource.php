@@ -91,50 +91,6 @@ class SiswaResource extends Resource
         return $table
             ->deferLoading()
             ->columns([
-                Tables\Columns\ImageColumn::make('foto')
-                    ->label('Foto')
-                    ->circular()
-                    ->height(40)
-                    ->width(40)
-                    ->getStateUsing(function ($record) {
-                        // Jika foto ada, gunakan rute foto-siswa
-                        if ($record && $record->foto) {
-                            return route('foto-siswa', ['filename' => basename($record->foto)]);
-                        }
-                        return null;
-                    })
-                    ->defaultImageUrl(function () {
-                        // Gunakan salah satu gambar yang sudah ada
-                        return url('images/01JV54444HP2KCAWFPWNQSE9KP.jpg');
-                    })
-                    ->extraCellAttributes(['class' => 'flex justify-center'])
-                    ->extraImgAttributes(['class' => 'object-cover rounded-full hover:scale-150 transition-transform duration-300'])
-                    ->action(function ($record) {
-                        if (!$record->foto) {
-                            // Jika tidak ada foto
-                            return;
-                        }
-                        
-                        // Ekstrak filename dari path lengkap
-                        $filename = basename($record->foto);
-                        
-                        // Gunakan rute khusus foto-siswa
-                        $publicPath = route('foto-siswa', ['filename' => $filename]);
-                        
-                        // Tampilkan foto dalam modal
-                        Tables\Actions\Action::make('view-image')
-                            ->modalHeading('Foto ' . $record->nama)
-                            ->modalContent(
-                                view('filament.components.view-image', [
-                                    'url' => $publicPath,
-                                    'alt' => $record->nama,
-                                    'path' => $record->foto,
-                                ])
-                            )
-                            ->modalWidth('md')
-                            ->modalAlignment('center')
-                            ->openModal();
-                    }),
                 TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),
@@ -178,10 +134,46 @@ class SiswaResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make()
+                    // collection $records: daftar semua baris (record) yang dipilih oleh user
+                    // Filament mengirim data yang DIPILIH dalam bentuk Collection, bukan array biasa
+                    ->action(function (\Illuminate\Support\Collection $records) {
+
+                        // kan ini bulkAction ya, aksi massal, ini tu yang checkbox itu, jadi bisa multiple select
+                        // makannya kita menggunakan Collection seperti di atas, kita bisa milih banyak
+                        // $records: sebuah koleksi data (biasanya array atau Collection), misalnya semua siswa yang dipilih user di tabel
+                        // as $record: setiap item tunggal dari koleksi tersebut akan ditampung ke variabel $record
+                        foreach ($records as $record) {
+                            // memanggil method deleteSiswa() untuk tiap data siswa yang dipilih
+                            static::deleteSiswa($record);
+                        }
+                    }),
             ]);
+    }
+
+    // fungsi inilah yang dijalankan ketika tombol hapus diklik
+    protected static function deleteSiswa($record) 
+    {
+        if ($record->pkl()->exists()) {
+            \Filament\Notifications\Notification::make()
+            // $record->pkl() = mengambil relasi pkl yang terkait dengan siswa tersebut (berdasarkan hasMany di model siswa)
+            // ->exists() = Mengecek apakah ada data pkls yang masih menggunakan merk ini.
+            // jika ada, pkl yang menggunakan siswa ini, penghapusan dibatalkan, dan muncul notifikasi error.
+                ->title('Gagal menghapus ' . $record->nama . '!')
+                ->body('Siswa ini masih digunakan dalam PKL. Hapus PKL terkait terlebih dahulu.')
+                ->danger() // merah
+                ->send();
+            return;
+        }
+
+        // jika siswa tidak digunakan dalam PKL, maka datanya     akan dihapus
+        $record->delete();
+
+        \Filament\Notifications\Notification::make()
+            ->title('Siswa dihapus!')
+            ->body('Siswa berhasil dihapus.')
+            ->success() // hijau
+            ->send();
     }
 
     public static function getRelations(): array

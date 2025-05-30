@@ -18,15 +18,33 @@ class EditSiswa extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
-            Actions\Action::make('viewPkl')
-                ->label('Lihat Data PKL')
-                ->icon('heroicon-o-briefcase')
-                ->color('info')
-                ->url(fn () => $this->record->status_lapor_pkl == 'True' && $this->record->pkl 
-                    ? route('filament.admin.resources.pkls.edit', ['record' => $this->record->pkl->id])
-                    : '#')
-                ->visible(fn () => $this->record->status_lapor_pkl == 'True' && $this->record->pkl),
+            Actions\DeleteAction::make()
+                ->action(function ($record) {
+                    // Cek apakah siswa memiliki data PKL terkait
+                    if ($record->pkl) {
+                        // Batalkan penghapusan dengan pesan error
+                        \Filament\Notifications\Notification::make()
+                            ->title('Gagal Menghapus')
+                            ->body('Tidak dapat menghapus ' . $record->nama . ' karena masih memiliki data PKL terkait. Hapus data PKL terlebih dahulu.')
+                            ->danger()
+                            ->send();
+                        return;
+                    }
+                    $record->delete();
+                    \Filament\Notifications\Notification::make()
+                        ->title('Berhasil')
+                        ->body('Data siswa berhasil dihapus')
+                        ->success()
+                        ->send();
+                })->requiresConfirmation(),
+            // Actions\Action::make('viewPkl')
+            //     ->label('Lihat Data PKL')
+            //     ->icon('heroicon-o-briefcase')
+            //     ->color('info')
+            //     ->url(fn () => $this->record->status_lapor_pkl == 'True' && $this->record->pkl 
+            //         ? route('filament.admin.resources.pkls.edit', ['record' => $this->record->pkl->id])
+            //         : '#')
+            //     ->visible(fn () => $this->record->status_lapor_pkl == 'True' && $this->record->pkl),
         ];
     }
     

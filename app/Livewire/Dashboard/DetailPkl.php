@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Siswa;
 use App\Models\Industri;
 use App\Models\Guru;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DetailPkl extends Component
@@ -17,6 +18,7 @@ class DetailPkl extends Component
     public $guru_id;
     public $daftarIndustri;
     public $daftarGuru;
+    public $isEditing = false;
 
     public function mount()
     {
@@ -33,13 +35,24 @@ class DetailPkl extends Component
 
     public function updatePkl()
     {
-        // Validasi dan simpan data PKL
+            // Validasi dan simpan data PKL
         $this->validate([
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'industri_id' => 'required|exists:industris,id',
-            'guru_id' => 'required|exists:gurus,id',
-        ]);
+        'tanggal_mulai' => 'required|date',
+        'tanggal_selesai' => [
+            'required',
+            'date',
+            'after_or_equal:tanggal_mulai',
+            function ($attribute, $value, $fail) {
+                $mulai = Carbon::parse($this->tanggal_mulai);
+                $selesai = Carbon::parse($value);
+                if ($mulai->diffInMonths($selesai) < 3) {
+                    $fail('Durasi PKL minimal harus 3 bulan.');
+                }
+            },
+        ],
+        'industri_id' => 'required|exists:industris,id',
+        'guru_id' => 'required|exists:gurus,id',
+    ]);
 
         $siswa = Siswa::where('email', Auth::user()->email)->first();
 
@@ -61,7 +74,16 @@ class DetailPkl extends Component
 
     public function render()
     {
+
         return view('livewire.dashboard.detail-pkl');
+    }
+    public function startEdit()
+    {
+        $this->isEditing = true;
+    }
+    public function cancelEdit()
+    {
+        $this->isEditing = false;
     }
 }
 

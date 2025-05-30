@@ -1,3 +1,4 @@
+<div>
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -96,55 +97,10 @@
     </div>
     @endif
 
-    <!-- @if(!$siswa)
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-5 sm:rounded-xl shadow-lg overflow-hidden relative" role="alert">
-                <div class="absolute inset-0 bg-blue-500 opacity-5"></div>
-                <div class="relative flex items-start">
-                    <div class="flex-shrink-0 bg-blue-500 rounded-full p-2 shadow-md">
-                        <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="font-bold text-lg text-blue-800">Informasi</p>
-                        <p class="text-blue-700 mt-1">Akun Anda belum memiliki data siswa. Silakan hubungi administrator untuk menambahkan data siswa Anda.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @elseif(!$pkl)
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-5 sm:rounded-xl shadow-lg overflow-hidden relative" role="alert">
-                <div class="absolute inset-0 bg-blue-500 opacity-5"></div>
-                <div class="relative flex items-start">
-                    <div class="flex-shrink-0 bg-blue-500 rounded-full p-2 shadow-md">
-                        <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="font-bold text-lg text-blue-800">Informasi</p>
-                        <p class="text-blue-700 mt-1">Anda belum memiliki data PKL. Silakan hubungi guru pembimbing atau administrator untuk mendapatkan penempatan PKL.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif -->
-
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-            <!-- User Info Card -->
             @if($siswa)
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-xl">
-                
-                <div class="p-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-                    <h3 class="font-semibold">Informasi Siswa</h3>
-                </div>
+            <div class="bg-white overflow-hidden shadow-lg sm:rounded-xl transition duration-300 hover:shadow-xl"> <div class="p-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-xl"> <h3 class="font-semibold text-lg">Informasi Siswa</h3> </div>
                 <div class="p-6">
                     <div class="flex flex-col md:flex-row">
                         <div class="md:w-1/4 flex justify-center mb-4 md:mb-0">
@@ -205,11 +161,7 @@
             </div>
             @endif
 
-            <!-- PKL Summary Component -->
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-xl transform transition duration-300 hover:shadow-2xl">
-                <div class="p-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white flex justify-between items-center">
-                    <h3 class="font-semibold">Ringkasan Praktik Kerja Lapangan</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="bg-white overflow-hidden shadow-lg sm:rounded-xl transition duration-300 hover:shadow-xl"> <div class="p-3.5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white flex justify-between items-center rounded-t-xl"> <h3 class="font-semibold text-lg">Ringkasan Praktik Kerja Lapangan</h3> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                 </div>
@@ -218,24 +170,8 @@
                 </div>
             </div>
             
-            <!-- Detail Industri Component -->
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-xl transform transition duration-300 hover:shadow-2xl">
-                <div class="p-3.5 bg-gradient-to-r from-purple-600 to-pink-700 text-white flex justify-between items-center">
-                    <h3 class="font-semibold">Detail Industri</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                </div>
-                <div class="p-6">
-                    <livewire:dashboard.daftar-industri />
-                </div>
-            </div>
             
-            <!-- Detail Guru Pembimbing Component -->
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-xl transform transition duration-300 hover:shadow-2xl">
-                <div class="p-3.5 bg-gradient-to-r from-green-600 to-emerald-700 text-white flex justify-between items-center">
-                    <h3 class="font-semibold">Detail Guru Pembimbing</h3>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="bg-white overflow-hidden shadow-lg sm:rounded-xl transition duration-300 hover:shadow-xl"> <div class="p-3.5 bg-gradient-to-r from-green-600 to-emerald-700 text-white flex justify-between items-center rounded-t-xl"> <h3 class="font-semibold text-lg">Detail Guru Pembimbing</h3> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                 </div>
@@ -265,7 +201,6 @@
         </div>
     </div>
     
-    <!-- Floating button for quick navigation -->
     <div class="fixed bottom-6 right-6 flex flex-col space-y-3">
         <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full shadow-xl hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-110 focus:outline-none group">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white transform transition-transform group-hover:-translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -274,3 +209,12 @@
         </button>
     </div>
 </x-app-layout>
+
+<style>
+    body, html {
+        overflow-y: auto;
+    }
+        ::-webkit-scrollbar {
+        display: none;
+    }
+</style>
