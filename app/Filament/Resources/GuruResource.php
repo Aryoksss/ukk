@@ -23,29 +23,43 @@ class GuruResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nip')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
-                Forms\Components\Select::make('gender')
-                    ->options([
-                        'L' => 'Laki - Laki',
-                        'P' => 'Perempuan',
-                    ])
-                    ->native(false)
-                    ->required(),
-                Forms\Components\TextInput::make('alamat')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('kontak')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
+                Forms\Components\Section::make()
+                ->schema([
+
+                    Forms\Components\Grid::make(2) // form dibagi jadi 2 kolom per baris
+                        ->schema([
+                            Forms\Components\TextInput::make('nama')
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpan(2),
+                            
+                            Forms\Components\TextInput::make('nip')
+                                ->required()
+                                ->unique(ignoreRecord: true)
+                                ->maxLength(255),
+                            
+                            Forms\Components\Select::make('gender')
+                                ->options([
+                                    'L' => 'Laki - Laki',
+                                    'P' => 'Perempuan',
+                                ])
+                                ->native(false)
+                                ->required(),
+                            
+                            Forms\Components\TextInput::make('alamat')
+                                ->maxLength(255),
+                            
+                            Forms\Components\TextInput::make('kontak')
+                                ->maxLength(255),
+                            
+                            Forms\Components\TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->unique(ignoreRecord: true)
+                                ->maxLength(255)
+                                ->columnSpan(2),
+                        ])
+                ])
             ]);
     }
 
@@ -97,7 +111,7 @@ class GuruResource extends Resource
                 $record->delete();
                 \Filament\Notifications\Notification::make()
                     ->title('Berhasil')
-                    ->body('Data guru berhasil dihapus')
+                    ->body(". $record->nama .  berhasil dihapus")
                     ->success()
                     ->send();
             })
@@ -119,7 +133,7 @@ class GuruResource extends Resource
                         $records->each->delete();
                         \Filament\Notifications\Notification::make()
                             ->title('Berhasil')
-                            ->body('Data guru berhasil dihapus')
+                            ->body(". $record->nama .  berhasil dihapus")
                             ->success()
                             ->send();
                     })->requiresConfirmation()

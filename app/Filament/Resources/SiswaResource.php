@@ -30,15 +30,22 @@ class SiswaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
+            Forms\Components\Section::make()
+            ->schema([
+                Forms\Components\Grid::make(2) // form dibagi jadi 2 kolom per baris
+                ->schema([
+                    Forms\Components\TextInput::make('nama')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nis')
+                    ->maxLength(255)
+                    ->columnSpan(2),
+                    
+                    Forms\Components\TextInput::make('nis')
                     ->label('NIS')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
-                Forms\Components\Select::make('rombel')
+                    
+                    Forms\Components\Select::make('rombel')
                     ->label('Rombel')
                     ->native(false)
                     ->options([
@@ -46,7 +53,8 @@ class SiswaResource extends Resource
                         'B' => 'SIJA B',
                     ])
                     ->required(),
-                Forms\Components\Select::make('gender')
+                    
+                    Forms\Components\Select::make('gender')
                     ->label('Jenis Kelamin')
                     ->native(false)
                     ->options([
@@ -54,21 +62,26 @@ class SiswaResource extends Resource
                         'P' => 'Perempuan',
                     ])
                     ->required(),
-                Forms\Components\TextInput::make('alamat')
+                    
+                    Forms\Components\TextInput::make('alamat')
                     ->label('Alamat')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('kontak')
+                    
+                    Forms\Components\TextInput::make('kontak')
                     ->label('Kontak')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                    
+                    Forms\Components\TextInput::make('email')
                     ->label('Email')
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true)
-                    ->maxLength(255),
-                Forms\Components\FileUpload::make('foto')
+                    ->maxLength(255)
+                    ->columnSpan(2),
+                    
+                    Forms\Components\FileUpload::make('foto')
                     ->label('Foto Siswa')
                     ->image()
                     ->disk('public')
@@ -81,7 +94,10 @@ class SiswaResource extends Resource
                     ->imageEditor()
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
                     ->maxSize(2048)
-                    ->helperText('Format: JPG, PNG. Ukuran maks: 2MB. Rasio 1:1.'),
+                    ->helperText('Format: JPG, PNG. Ukuran maks: 2MB. Rasio 1:1.')
+                    ->columnSpan(2),
+                ])
+            ])
             ]);
     }
 
@@ -138,7 +154,10 @@ class SiswaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function ($record) {
+                        static::deleteSiswa($record);
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make()

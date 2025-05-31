@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 class Siswa extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'tailwind';
 
     public $search = '';
     public $selectedSiswa = null;

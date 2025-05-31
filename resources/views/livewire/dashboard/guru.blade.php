@@ -87,7 +87,7 @@
                     </ul>
                     @if ($gurus->hasPages())
                     <div class="px-4 py-4 bg-gray-50 border-t border-gray-200 sm:px-6">
-                        {{ $gurus->links('pagination::tailwind') }}
+                        {{ $gurus->links('livewire.pagination') }}
                     </div>
                     @endif
                 </div>

@@ -101,7 +101,7 @@
                     </ul>
                     @if(is_object($siswa) && method_exists($siswa, 'links'))
                     <div class="px-4 py-4 bg-gray-50 border-t border-gray-200 sm:px-6">
-                        {{ $siswa->links('pagination::tailwind') }}
+                        {{ $siswa->links('livewire.pagination') }}
                     </div>
                     @endif
                 </div>

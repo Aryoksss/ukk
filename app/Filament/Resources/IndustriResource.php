@@ -49,7 +49,7 @@ class IndustriResource extends Resource
                             ->maxLength(255),
                         Forms\Components\TextInput::make('website')
                             ->maxLength(255)
-                            ->helperText('Contoh: example.com'),
+                            ->helperText('Contoh: aryok.tech'),
                     ]),
             ]);
     }
@@ -110,7 +110,7 @@ class IndustriResource extends Resource
                         $record->delete();
                         \Filament\Notifications\Notification::make()
                             ->title('Berhasil')
-                            ->body('Data industri berhasil dihapus')
+                            ->body('Industri ' . $record->nama . ' berhasil dihapus')
                             ->success()
                             ->send();
                     })->requiresConfirmation()
@@ -135,7 +135,7 @@ class IndustriResource extends Resource
                         if ($skipped > 0) {
                             \Filament\Notifications\Notification::make()
                                 ->title('Data Tidak Dapat Dihapus')
-                                ->body("$skipped data industri tidak dapat dihapus karena masih memiliki data PKL terkait.")
+                                ->body(". $record->nama . data industri tidak dapat dihapus karena masih memiliki data PKL terkait.")
                                 ->danger()
                                 ->send();
                         }

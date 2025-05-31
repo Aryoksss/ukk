@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 class Guru extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     
     public $search = '';
     public $perPage = 10;

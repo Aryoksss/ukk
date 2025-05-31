@@ -15,24 +15,6 @@ class ListSiswas extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('search')
-                ->label('Cari')
-                ->icon('heroicon-o-magnifying-glass')
-                ->iconPosition(IconPosition::Before)
-                ->form([
-                    TextInput::make('search')
-                        ->label('Cari Siswa')
-                        ->placeholder('Masukkan nama, NIS, dll')
-                        ->autoFocus()
-                        ->autofocus(),
-                ])
-                ->action(function (array $data): void {
-                    $this->tableFilters['tableSearch'] = $data['search'];
-                    $this->resetTableFiltersForm();
-                })
-                ->color('gray')
-                ->outlined(),
-                
             Actions\CreateAction::make()
                 ->label('Tambah Siswa Baru')
                 ->icon('heroicon-o-plus-circle')

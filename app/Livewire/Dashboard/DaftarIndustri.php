@@ -11,6 +11,7 @@ use Livewire\Attributes\Validate;
 class DaftarIndustri extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public $search = '';
     public $perPage = 5;

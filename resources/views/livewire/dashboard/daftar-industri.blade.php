@@ -143,7 +143,7 @@
                     </ul>
                     @if ($industris->hasPages())
                     <div class="px-4 py-4 bg-gray-50 border-t border-gray-200 sm:px-6">
-                        {{ $industris->links('pagination::tailwind') }}
+                        {{ $industris->links('livewire.pagination') }}
                     </div>
                     @endif
                 </div>

@@ -15,24 +15,6 @@ class ListPkls extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('search')
-                ->label('Cari')
-                ->icon('heroicon-o-magnifying-glass')
-                ->iconPosition(IconPosition::Before)
-                ->form([
-                    TextInput::make('search')
-                        ->label('Cari Data PKL')
-                        ->placeholder('Masukkan nama siswa, industri, dll')
-                        ->autoFocus()
-                        ->autofocus(),
-                ])
-                ->action(function (array $data): void {
-                    $this->tableFilters['tableSearch'] = $data['search'];
-                    $this->resetTableFiltersForm();
-                })
-                ->color('gray')
-                ->outlined(),
-                
             Actions\CreateAction::make()
                 ->label('Tambah Data PKL')
                 ->icon('heroicon-o-plus-circle')

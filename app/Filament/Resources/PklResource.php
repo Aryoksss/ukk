@@ -27,7 +27,7 @@ class PklResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()
+                Forms\Components\Section::make()
                 ->schema([
 
                     Forms\Components\Grid::make(2) // form dibagi jadi 2 kolom per baris
