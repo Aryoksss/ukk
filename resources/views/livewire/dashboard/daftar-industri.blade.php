@@ -181,7 +181,15 @@
                                                 </div>
                                                 <div>
                                                     <dt class="text-sm font-medium text-gray-500">Email</dt>
-                                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedIndustri['email'] ?? 'Belum ada data' }}</dd>
+                                                    <dd class="mt-1 text-sm text-gray-900">
+                                                        @if($selectedIndustri['email'])
+                                                            <a href="mailto:{{ $selectedIndustri['email'] }}" class="text-indigo-600 hover:text-indigo-800 hover:underline">
+                                                                {{ $selectedIndustri['email'] }}
+                                                            </a>
+                                                        @else
+                                                            Belum ada data
+                                                        @endif
+                                                    </dd>
                                                 </div>
                                                 <div>
                                                     <dt class="text-sm font-medium text-gray-500">Website</dt>
