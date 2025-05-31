@@ -11,7 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::middleware(['auth', 'role:admin|guru|siswa'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -20,8 +19,6 @@ Route::middleware(['auth', 'role:admin|guru|siswa'])->group(function () {
     Route::get('/dashboard/siswa', Siswa::class)->name('siswa');
     Route::get('/dashboard/guru', Guru::class)->name('guru');
 });
-
-
 
 // Rute langsung untuk mengakses gambar
 Route::get('/foto-siswa/{filename}', function ($filename) {

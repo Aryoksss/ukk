@@ -51,7 +51,11 @@ class AdminPanelProvider extends PanelProvider
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
-                CheckUserHasRole::class . ':super_admin',
+                DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([
+                Authenticate::class,
+                CheckUserHasRole::class,
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
