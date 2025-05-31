@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
+
 class CheckUserHasRole
 {
     /**
@@ -14,31 +15,26 @@ class CheckUserHasRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Periksa apakah user terautentikasi
-        if (Auth::check()) {
-            try {
-                // Periksa apakah user memiliki role
-                if (Auth::user()->roles->isEmpty()) {
-                    // Jika akses ke Filament Admin Panel atau dashboard, redirect ke halaman peringatan
-                    if ($request->is('admin*') || $request->is('dashboard')) {
-                        // Jika belum ada pesan flashed, tambahkan
-                        if (!session()->has('warning')) {
-                            session()->flash('warning', 'Akun Anda belum mendapatkan peran. Anda tidak dapat mengakses dashboard atau fitur lainnya sampai administrator memberikan peran kepada Anda.');
-                        }
-                        
-                        // Jika mencoba mengakses dashboard, alihkan ke halaman waiting
-                        return redirect()->route('waiting-approval');
-                    }
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+        
+        // Cek jika user memiliki role siswa dan mencoba mengakses filament admin
+        if ($request->is('admin*') && Auth::user()->roles->contains('name', 'siswa')) {
+            session()->flash('warning', 'Siswa tidak diizinkan mengakses panel admin.');
+            return redirect()->route('dashboard');
+        }
+        
+        // If roles are specified, check if user has one of them
+        if (!empty($roles)) {
+            foreach($roles as $role) {
+                if(Auth::user()->roles->contains('name', $role)) {
+                    return $next($request);
                 }
-            } catch (\Exception $e) {
-                // Tangani kesalahan jika ada masalah dengan relasi roles
-                // Ini dapat terjadi jika tabel roles belum dibuat atau migrasi belum dijalankan
-                report($e);
-                session()->flash('error', 'Terjadi kesalahan pada sistem. Silakan hubungi administrator.');
-                return redirect()->route('waiting-approval');
             }
+            return abort(403, 'Unauthorized action.');
         }
         
         return $next($request);

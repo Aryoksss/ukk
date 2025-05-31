@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use App\Http\Middleware\CheckUserHasRole;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -50,13 +51,10 @@ class AdminPanelProvider extends PanelProvider
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
-                DispatchServingFilamentEvent::class,
+                CheckUserHasRole::class . ':super_admin',
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
-            ])
-            ->authMiddleware([
-                Authenticate::class,
             ]);
     }
 }

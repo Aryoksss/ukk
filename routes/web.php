@@ -12,44 +12,15 @@ Route::get('/', function () {
 });
 
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->get('/check-role-status', function () {
-    return response()->json([
-        'hasRole' => !Auth::user()->roles->isEmpty(),
-    ]);
-})->name('check-role-status');
-
-// Rute untuk halaman menunggu persetujuan
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->get('/waiting-approval', function () {
-    // Jika user sudah memiliki role, redirect ke dashboard
-    if (Auth::check() && !Auth::user()->roles->isEmpty()) {
-        return redirect()->route('dashboard');
-    }
-    
-    return view('waiting-approval');
-})->name('waiting-approval');
-
-// Rute untuk dashboard dan halaman lain yang memerlukan role
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-    CheckUserHasRole::class,
-])->group(function () {
+Route::middleware(['auth', 'role:admin|guru|siswa'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
     Route::get('/dashboard/industri', DaftarIndustri::class)->name('industri');
-    Route::get('/dashboard/guru', Guru::class)->name('guru');
     Route::get('/dashboard/siswa', Siswa::class)->name('siswa');
+    Route::get('/dashboard/guru', Guru::class)->name('guru');
 });
+
 
 
 // Rute langsung untuk mengakses gambar
