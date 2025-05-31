@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CheckUserHasRole;
-use Illuminate\Support\Facades\Auth;
 use App\Livewire\Dashboard\DaftarIndustri;
 use App\Livewire\Dashboard\Guru;
 use App\Livewire\Dashboard\Siswa;

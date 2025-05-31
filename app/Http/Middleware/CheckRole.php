@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
 
-class CheckUserHasRole
+class CheckRole
 {
     /**
      * Handle an incoming request.
@@ -23,7 +23,7 @@ class CheckUserHasRole
         
         // Cek jika user memiliki role siswa dan mencoba mengakses filament admin
         if ($request->is('admin*') && Auth::user()->roles->contains('name', 'siswa')) {
-            session()->flash('warning', 'Siswa tidak diizinkan mengakses panel admin.');
+            session()->flash('warning', 'OWWW TIDAK BOLEEEE.');
             return redirect()->route('dashboard');
         }
         
