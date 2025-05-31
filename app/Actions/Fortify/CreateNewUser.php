@@ -30,9 +30,6 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        // Beri tahu PreregisteredUserValidator (kosong, hanya untuk formalitas)
-        PreregisteredUserValidator::validate($input);
-
         if (!Siswa::where('email', $input['email'])->exists()) {
             throw ValidationException::withMessages([
                 'email' => 'Email ini tidak terdaftar sebagai siswa.', 
