@@ -22,7 +22,7 @@ class CheckRole
         }
         
         // Cek jika user memiliki role siswa dan mencoba mengakses filament admin
-        if ($request->is('admin*') && Auth::user()->roles->contains('name', 'siswa')) {
+        if ($request->is('admin*') && !Auth::user()->roles->contains('name', 'super_admin')) {
             session()->flash('warning', 'OWWW TIDAK BOLEEEE.');
             return redirect()->route('dashboard');
         }
