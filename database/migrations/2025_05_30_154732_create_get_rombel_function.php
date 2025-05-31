@@ -12,6 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::unprepared("DROP FUNCTION IF EXISTS getRombelCode");
         DB::unprepared("
             CREATE FUNCTION getRombelCode(code CHAR(1))
             RETURNS VARCHAR(20)
