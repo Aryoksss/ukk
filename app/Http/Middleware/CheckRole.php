@@ -27,15 +27,6 @@ class CheckRole
             return redirect()->route('dashboard');
         }
         
-        // If roles are specified, check if user has one of them
-        if (!empty($roles)) {
-            foreach($roles as $role) {
-                if(Auth::user()->roles->contains('name', $role)) {
-                    return $next($request);
-                }
-            }
-            return abort(403, 'Unauthorized action.');
-        }
         
         return $next($request);
     }
