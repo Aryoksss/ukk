@@ -146,6 +146,22 @@ class GuruResource extends Resource
             //
         ];
     }
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Kelola PKL';
+    }
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
+    }
+    public static function getNavigationBadge(): ?string
+    {
+        // Menghitung jumlah guru yang ada
+        $count = Guru::count();
+        
+        // Menampilkan badge dengan jumlah guru
+        return $count > 0 ? (string) $count : null;
+    }
 
     public static function getPages(): array
     {

@@ -109,6 +109,18 @@ class UserResource extends Resource
             //
         ];
     }
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Kelola User';
+    }
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
+    }
+    public static function getNavigationBadge(): ?string
+    {
+        return User::count() > 0 ? (string) User::count() : null;
+    }
 
     public static function getPages(): array
     {

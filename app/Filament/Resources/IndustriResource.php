@@ -165,6 +165,19 @@ class IndustriResource extends Resource
             //
         ];
     }
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Industri::count();
+        return $count > 0 ? (string) $count : null;
+    }
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'success'; // Warna badge, bisa diubah sesuai kebutuhan
+    }
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Kelola PKL';
+    }
 
     public static function getPages(): array
     {

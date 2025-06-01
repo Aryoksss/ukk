@@ -217,4 +217,19 @@ class SiswaResource extends Resource
             'edit' => Pages\EditSiswa::route('/{record}/edit'),
         ];
     }
+    public static function getNavigationBadge(): ?string
+    {
+        $totalSiswa = static::getModel()::count();
+        $siswaLaporPkl = static::getModel()::where('status_lapor_pkl', true)->count();
+        
+        return $siswaLaporPkl . '/' . $totalSiswa;
+    }
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success'; // warna badge, bisa diubah sesuai kebutuhan
+    }
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Kelola PKL';
+    }
 }

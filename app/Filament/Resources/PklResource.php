@@ -145,6 +145,18 @@ class PklResource extends Resource
             //
         ];
     }
+    public static function getNavigationBadge(): ?string
+    {
+        // Menghitung jumlah PKL yang ada
+        $count = Pkl::count();
+        
+        // Menampilkan badge dengan jumlah PKL
+        return $count > 0 ? (string) $count : null;
+    }
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Kelola PKL';
+    }   
 
     public static function getPages(): array
     {
