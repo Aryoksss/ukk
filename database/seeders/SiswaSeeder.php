@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Siswa;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class SiswaSeeder extends Seeder
 {
@@ -13,7 +12,7 @@ class SiswaSeeder extends Seeder
      */
     public function run(): void
     {
-         $siswa = Siswa::insert([
+         Siswa::insert([
             [
                 'nama' => 'ABU BAKAR TSABIT GHUFRON', 
                 'nis' => '20388',
