@@ -6,6 +6,7 @@ use App\Models\Guru as GuruModel;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+
 class Guru extends Component
 {
     use WithPagination;
@@ -65,6 +66,7 @@ class Guru extends Component
         return view('livewire.dashboard.guru', [
             'gurus' => GuruModel::where('nama', 'like', '%' . $this->search . '%')
                 ->orWhere('nip', 'like', '%' . $this->search . '%')
+                ->orderBy('nama', 'asc')
                 ->paginate($this->perPage)
         ]);
     }

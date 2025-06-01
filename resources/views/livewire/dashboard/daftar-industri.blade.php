@@ -37,16 +37,23 @@
                     <div class="flex w-full sm:w-auto">
                         <div class="flex items-center w-full sm:w-auto">
                             <div class="relative flex-grow sm:flex-grow-0">
-                                <input wire:model.debounce.300ms="search" wire:keydown.enter="searchIndustri" id="search-industri" type="text" placeholder="Cari industri..." 
-                                       class="block w-full pr-10 pl-3 py-2.5 focus:outline-none sm:text-sm rounded-l-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari industri..." 
+                                       class="block w-full pr-10 pl-10 py-2.5 focus:outline-none sm:text-sm rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                @if($search)
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                    <button wire:click="$set('search', '')" class="text-gray-400 hover:text-gray-600">
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                @endif
                             </div>
-                            <button 
-                                wire:click="searchIndustri"
-                                class="inline-flex items-center px-4 py-2.5 border border-l-0 border-indigo-600 text-sm font-medium rounded-r-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
                         </div>
                         <button wire:click="toggleIndustriForm" class="ml-3 inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -57,53 +64,86 @@
                     </div>
                 </div>
                 
+                <!-- Loading indicator -->
+                <div wire:loading wire:target="search" class="flex justify-center items-center py-4 mb-4">
+                    <div class="flex items-center space-x-2 text-gray-500">
+                        <svg class="animate-spin h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="text-sm">Mencari industri...</span>
+                    </div>
+                </div>
+                
+                @if(((is_object($industris) && $industris->isEmpty()) || (is_array($industris) && empty($industris))) && $search)
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">Tidak ada industri yang ditemukan dengan kata kunci "{{ $search }}"</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
                 @if($showIndustriForm)
                 <div class="bg-white shadow-lg overflow-hidden sm:rounded-lg mb-6 p-6">
                     <div class="mb-5 border-b border-gray-200 pb-4">
                         <h3 class="text-xl font-semibold text-gray-900">Tambah Industri Baru</h3>
-                        <p class="mt-1 text-sm text-gray-600">Lengkapi informasi di bawah untuk menambahkan industri baru.</p>
+                        <p class="mt-1 text-sm text-gray-600">Lengkapi informasi Industri.</p>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="nama_industri" class="block text-sm font-medium text-gray-700 mb-1">Nama Industri</label>
-                            <input wire:model="nama_industri" type="text" id="nama_industri" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
-                            @error('nama_industri') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <label for="bidang_usaha" class="block text-sm font-medium text-gray-700 mb-1">Bidang Usaha</label>
-                            <input wire:model="bidang_usaha" type="text" id="bidang_usaha" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
-                            @error('bidang_usaha') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <label for="alamat_industri" class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
-                            <input wire:model="alamat_industri" type="text" id="alamat_industri" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
-                            @error('alamat_industri') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <label for="kontak_industri" class="block text-sm font-medium text-gray-700 mb-1">Kontak</label>
-                            <input wire:model="kontak_industri" type="text" id="kontak_industri" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
-                            @error('kontak_industri') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <label for="email_industri" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input wire:model="email_industri" type="email" id="email_industri" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
-                            @error('email_industri') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <label for="website_industri" class="block text-sm font-medium text-gray-700 mb-1">Website</label>
-                            <input wire:model="website_industri" type="text" id="website_industri" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
-                            @error('website_industri') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                    <form wire:submit.prevent="createIndustri">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="nama_industri" class="block text-sm font-medium text-gray-700 mb-1">Nama Industri <span class="text-red-500">*</span></label>
+                                <input wire:model="nama_industri" type="text" id="nama_industri" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Nama industri">
+                                @error('nama_industri') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            
+                            <div>
+                                <label for="bidang_usaha" class="block text-sm font-medium text-gray-700 mb-1">Bidang Usaha <span class="text-red-500">*</span></label>
+                                <input wire:model="bidang_usaha" type="text" id="bidang_usaha" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Bidang usaha">
+                                @error('bidang_usaha') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label for="alamat" class="block text-sm font-medium text-gray-700 mb-1">Alamat <span class="text-red-500">*</span></label>
+                                <textarea wire:model="alamat" id="alamat" rows="3" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Alamat lengkap"></textarea>
+                                @error('alamat') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            
+                            <div>
+                                <label for="kontak" class="block text-sm font-medium text-gray-700 mb-1">Kontak <span class="text-red-500">*</span></label>
+                                <input wire:model="kontak" type="text" id="kontak" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Kontak industri">
+                                @error('kontak') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                                <input wire:model="email" type="email" id="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="business@example.com">
+                                @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label for="website" class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+                                <input wire:model="website" type="url" id="website" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="example.com">
+                                @error('website') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                         
-                    </div>
-                    <div class="flex justify-end space-x-3 mt-8">
-                        <button type="button" wire:click="toggleIndustriForm" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Batal
-                        </button>
-                        <button type="button" wire:click="createIndustri" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Simpan Industri
-                        </button>
-                    </div>
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button type="button" wire:click="toggleIndustriForm" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Batal
+                            </button>
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Simpan Industri
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 @endif
                 

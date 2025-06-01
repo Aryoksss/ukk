@@ -40,9 +40,10 @@ class GuruResource extends Resource
                             
                             Forms\Components\Select::make('gender')
                                 ->options([
-                                    'L' => 'Laki - Laki',
+                                    'L' => 'Laki-laki',
                                     'P' => 'Perempuan',
                                 ])
+                                ->formatStateUsing(fn ($state) => DB::select("select getGenderCode(?) AS gender", [$state])[0]->gender)
                                 ->native(false)
                                 ->required(),
                             
@@ -133,7 +134,7 @@ class GuruResource extends Resource
                         $records->each->delete();
                         \Filament\Notifications\Notification::make()
                             ->title('Berhasil')
-                            ->body(". $record->nama .  berhasil dihapus")
+                            ->body(" $record->nama .  berhasil dihapus")
                             ->success()
                             ->send();
                     })->requiresConfirmation()

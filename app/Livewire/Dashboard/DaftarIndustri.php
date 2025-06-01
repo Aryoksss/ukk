@@ -26,13 +26,13 @@ class DaftarIndustri extends Component
     #[Validate('required|string|max:255')]
     public $bidang_usaha = '';
     
-    #[Validate('nullable|string|max:255')]
+    #[Validate('required|string|max:255')]
     public $alamat_industri = '';
     
-    #[Validate('nullable|string|max:255')]
+    #[Validate('required|string|max:255')]
     public $kontak_industri = '';
     
-    #[Validate('nullable|email|max:255')]
+    #[Validate('required|email|max:255')]
     public $email_industri = '';
     
     #[Validate('nullable|string|max:255')]
@@ -93,9 +93,9 @@ class DaftarIndustri extends Component
         $this->validate([
             'nama_industri' => 'required|string|max:255',
             'bidang_usaha' => 'required|string|max:255',
-            'alamat_industri' => 'nullable|string|max:255',
-            'kontak_industri' => 'nullable|string|max:255',
-            'email_industri' => 'nullable|email|max:255',
+            'alamat_industri' => 'required|string|max:255',
+            'kontak_industri' => 'required|string|max:255',
+            'email_industri' => 'required|email|max:255',
             'website_industri' => 'nullable|string|max:255',
         ]);
         
@@ -123,6 +123,7 @@ class DaftarIndustri extends Component
             return view('livewire.dashboard.daftar-industri', [
                 'industris' => Industri::where('nama', 'like', '%' . $this->search . '%')
                     ->orWhere('bidang_usaha', 'like', '%' . $this->search . '%')
+                    ->orderBy('nama', 'asc')
                     ->paginate($this->perPage),
                 'gurus' => Guru::all(),
             ]);
