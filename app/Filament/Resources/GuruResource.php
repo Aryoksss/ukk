@@ -43,7 +43,6 @@ class GuruResource extends Resource
                                     'L' => 'Laki-laki',
                                     'P' => 'Perempuan',
                                 ])
-                                ->formatStateUsing(fn ($state) => DB::select("select getGenderCode(?) AS gender", [$state])[0]->gender)
                                 ->native(false)
                                 ->required(),
                             
