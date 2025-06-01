@@ -56,6 +56,11 @@ class DetailPkl extends Component
 
         $siswa = Siswa::where('email', Auth::user()->email)->first();
 
+        if (!$siswa) {
+            session()->flash('error', 'Data siswa tidak ditemukan.');
+            return;
+        }
+
         $siswa->pkl()->create([
             'guru_id' => $this->guru_id,
             'industri_id' => $this->industri_id,
