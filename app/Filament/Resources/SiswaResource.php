@@ -71,7 +71,40 @@ class SiswaResource extends Resource
                     Forms\Components\TextInput::make('kontak')
                     ->label('Kontak')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->tel()
+                    ->formatStateUsing(function ($state) {
+                        if (!$state) return null;
+                        
+                        // Jika sudah ada +62, kembalikan seperti semula
+                        if (str_starts_with($state, '+62')) {
+                            return $state;
+                        }
+                        
+                        // Jika dimulai dengan 0, hapus 0 dan tambah +62
+                        if (str_starts_with($state, '0')) {
+                            return '+62' . substr($state, 1);
+                        }
+                        
+                        // Jika tidak dimulai dengan 0 atau +62, tambah +62
+                        return '+62' . $state;
+                    })
+                    ->dehydrateStateUsing(function ($state) {
+                        if (!$state) return null;
+                        
+                        // Jika sudah ada +62, kembalikan seperti semula
+                        if (str_starts_with($state, '+62')) {
+                            return $state;
+                        }
+                        
+                        // Jika dimulai dengan 0, hapus 0 dan tambah +62
+                        if (str_starts_with($state, '0')) {
+                            return '+62' . substr($state, 1);
+                        }
+                        
+                        // Jika tidak dimulai dengan 0 atau +62, tambah +62
+                        return '+62' . $state;
+                    }),
                     
                     Forms\Components\TextInput::make('email')
                     ->label('Email')
@@ -125,7 +158,24 @@ class SiswaResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('kontak')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(function ($state) {
+                        if (!$state) return null;
+
+                        // Tampilkan format yang lebih readable
+                        if (str_starts_with($state, '+62')) {
+                            // Ubah +62812345678 menjadi +62 812-345-678
+                            return $state;
+                        }
+
+                        // Jika dimulai dengan 0, hapus 0 dan tambah +62
+                        if (str_starts_with($state, '0')) {
+                            return '+62' . substr($state, 1);
+                        }
+
+                        // Jika tidak dimulai dengan 0 atau +62, tambah +62
+                        return '+62' . $state;
+                    }),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\BadgeColumn::make('status_lapor_pkl')
@@ -155,13 +205,6 @@ class SiswaResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                ->visible(function ($record) {
-                    // Mengecek apakah siswa ini memiliki data PKL
-                    if ($record->pkl()->exists()) {
-                        return false; // Hide button jika ada PKL
-                    }
-                    return true;
-                })
                 ->action(function ($record) {
                     static::deleteSiswa($record);
                 })

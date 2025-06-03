@@ -50,7 +50,39 @@ class GuruResource extends Resource
                                 ->maxLength(255),
                             
                             Forms\Components\TextInput::make('kontak')
-                                ->maxLength(255),
+                                ->maxLength(255)
+                                ->formatStateUsing(function ($state) {
+                                    if (!$state) return null;
+                                    
+                                    // Jika sudah ada +62, kembalikan seperti semula
+                                    if (str_starts_with($state, '+62')) {
+                                        return $state;
+                                    }
+                                    
+                                    // Jika dimulai dengan 0, hapus 0 dan tambah +62
+                                    if (str_starts_with($state, '0')) {
+                                        return '+62' . substr($state, 1);
+                                    }
+                                    
+                                    // Jika tidak dimulai dengan 0 atau +62, tambah +62
+                                    return '+62' . $state;
+                                })
+                                ->dehydrateStateUsing(function ($state) {
+                                    if (!$state) return null;
+                                    
+                                    // Jika sudah ada +62, kembalikan seperti semula
+                                    if (str_starts_with($state, '+62')) {
+                                        return $state;
+                                    }
+                                    
+                                    // Jika dimulai dengan 0, hapus 0 dan tambah +62
+                                    if (str_starts_with($state, '0')) {
+                                        return '+62' . substr($state, 1);
+                                    }
+                                    
+                                    // Jika tidak dimulai dengan 0 atau +62, tambah +62
+                                    return '+62' . $state;
+                                }),
                             
                             Forms\Components\TextInput::make('email')
                                 ->email()
@@ -79,7 +111,24 @@ class GuruResource extends Resource
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('kontak')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(function ($state) {
+                        if (!$state) return null;
+
+                        // Tampilkan format yang lebih readable
+                        if (str_starts_with($state, '+62')) {
+                            // Ubah +62812345678 menjadi +62 812-345-678
+                            return $state;
+                        }
+
+                        // Jika dimulai dengan 0, hapus 0 dan tambah +62
+                        if (str_starts_with($state, '0')) {
+                            return '+62' . substr($state, 1);
+                        }
+
+                        // Jika tidak dimulai dengan 0 atau +62, tambah +62
+                        return '+62' . $state;
+                    }),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
