@@ -155,26 +155,48 @@ class SiswaResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                    ->action(function ($record) {
-                        static::deleteSiswa($record);
-                    })
+                ->visible(function ($record) {
+                    // Mengecek apakah siswa ini memiliki data PKL
+                    if ($record->pkl()->exists()) {
+                        return false; // Hide button jika ada PKL
+                    }
+                    return true;
+                })
+                ->action(function ($record) {
+                    static::deleteSiswa($record);
+                })
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make()
-                    // collection $records: daftar semua baris (record) yang dipilih oleh user
-                    // Filament mengirim data yang DIPILIH dalam bentuk Collection, bukan array biasa
-                    ->action(function (\Illuminate\Support\Collection $records) {
+                ->visible(function () {
+                // Get selected records IDs from request
+                $selectedRecords = request()->get('selected', []);
+                
+                if (empty($selectedRecords)) {
+                    return true; // Show button jika belum ada yang dipilih
+                }
+                
+                // Periksa apakah ada siswa dengan ID tersebut yang memiliki data PKL
+                $hasActivePkl = \App\Models\Siswa::whereIn('id', $selectedRecords)
+                    ->whereHas('pkl')
+                    ->exists();
+                    
+                return !$hasActivePkl; // Hide button jika ada siswa dengan PKL
+            })
+            // collection $records: daftar semua baris (record) yang dipilih oleh user
+            // Filament mengirim data yang DIPILIH dalam bentuk Collection, bukan array biasa
+            ->action(function (\Illuminate\Support\Collection $records) {
 
-                        // kan ini bulkAction ya, aksi massal, ini tu yang checkbox itu, jadi bisa multiple select
-                        // makannya kita menggunakan Collection seperti di atas, kita bisa milih banyak
-                        // $records: sebuah koleksi data (biasanya array atau Collection), misalnya semua siswa yang dipilih user di tabel
-                        // as $record: setiap item tunggal dari koleksi tersebut akan ditampung ke variabel $record
-                        foreach ($records as $record) {
-                            // memanggil method deleteSiswa() untuk tiap data siswa yang dipilih
-                            static::deleteSiswa($record);
-                        }
-                    }),
-            ]);
+                // kan ini bulkAction ya, aksi massal, ini tu yang checkbox itu, jadi bisa multiple select
+                // makannya kita menggunakan Collection seperti di atas, kita bisa milih banyak
+                // $records: sebuah koleksi data (biasanya array atau Collection), misalnya semua siswa yang dipilih user di tabel
+                // as $record: setiap item tunggal dari koleksi tersebut akan ditampung ke variabel $record
+                foreach ($records as $record) {
+                    // memanggil method deleteSiswa() untuk tiap data siswa yang dipilih
+                    static::deleteSiswa($record);
+                }
+            }),
+        ]);
     }
 
     // fungsi inilah yang dijalankan ketika tombol hapus diklik

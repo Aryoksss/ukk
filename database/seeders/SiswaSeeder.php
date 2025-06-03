@@ -50,7 +50,7 @@ class SiswaSeeder extends Seeder
                 'gender' => 'P',
                 'alamat' => 'Madurejo',
                 'kontak' => '081272353535',
-                'email' => 'sekarsayang@aryok.tech',
+                'email' => 'sekar@aryok.tech',
                 'status_lapor_pkl'=> false,
             ],
             [
@@ -60,7 +60,7 @@ class SiswaSeeder extends Seeder
                 'gender' => 'L',
                 'alamat' => 'Berbah',
                 'kontak' => '082265468133',
-                'email' => 'sayangtitis@aryok.tech',
+                'email' => 'arya@aryok.tech',
                 'status_lapor_pkl'=> false,
             ],
             [
